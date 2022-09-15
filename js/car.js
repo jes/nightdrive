@@ -30,7 +30,7 @@ function Car() {
 
 Car.prototype.render = function(scene) {
     if (this.vel.y > 0) {
-        // moving in same direction as viewer: draw read lights
+        // moving in same direction as viewer: draw rearlights
         for (l of this.rearlights) {
             scene.ctx.fillStyle = l.col;
             scene.drawCircle(this.pos.sub(l.xy), l.z, l.r);

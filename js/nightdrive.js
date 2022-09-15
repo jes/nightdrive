@@ -8,7 +8,7 @@ let catseyedist = 40; // metres
 function init() {
     observer = new Car();
     observer.pos.x = lanes[1];
-    observer.vel.y = 70 * 1600/3600; // 70 mph observer
+    observer.vel.y = speed[1];
 
     for (let i = 0; i < 40; i++) {
         const car = new Car();
