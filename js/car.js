@@ -47,12 +47,15 @@ Car.prototype.render = function(scene) {
 Car.prototype.step = function(dt) {
     this.pos = this.pos.add(this.vel.mul(dt));
 
-    if (this.pos.y > 10000) this.pos.y = 0;
-    if (this.pos.y < 0) this.pos.y = 10000;
-
     this.indication += dt;
     while (this.indication > this.indicatorperiod)
         this.indication -= this.indicatorperiod;
+
+    const wrapy = 1000;
+    while (this.pos.y > observer.pos.y+wrapy && this.vel.y > observer.vel.y)
+        this.pos.y -= wrapy;
+    while (this.pos.y < observer.pos.y && this.vel.y < observer.vel.y)
+        this.pos.y += wrapy;
 };
 
 function colour(r1,r2, g1,g2, b1,b2) {

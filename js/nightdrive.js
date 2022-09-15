@@ -8,11 +8,12 @@ let catseyedist = 40; // metres
 function init() {
     observer = new Car();
     observer.pos.x = lanes[1];
+    observer.vel.y = 70 * 1600/3600; // 70 mph observer
 
-    for (let i = 0; i < 200; i++) {
+    for (let i = 0; i < 40; i++) {
         const car = new Car();
         const lane = Math.floor(Math.random()*lanes.length);
-        car.pos = new V2d(lanes[lane],i*50);
+        car.pos = new V2d(lanes[lane],i*25);
         const mph = speed[lane];
         car.vel = new V2d(0, mph * 1600 / 3600);
         if (Math.random() < 0.5) {
@@ -21,8 +22,6 @@ function init() {
         }
         cars.push(car);
     }
-
-    observer.vel.y = 70 * 1600/3600; // 70 mph observer
 
     render();
 }
