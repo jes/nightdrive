@@ -37,8 +37,9 @@ function render() {
     scene.viewpoint = observer.pos;
     scene.viewz = 1.0; // 1 metre off ground
 
+    catseyes(scene, lanes[0]-1.5);
     for (lanex of lanes) {
-        catseyes(scene, lanex);
+        catseyes(scene, lanex+1.5);
     }
 
     for (car of cars) {
@@ -50,11 +51,11 @@ function render() {
 
 function catseyes(scene, x) {
     const numlines = Math.floor(observer.pos.y / catseyedist);
-    const starty = (numlines-2)*catseyedist;
+    const starty = (numlines-1)*catseyedist;
     for (let y = starty; y < observer.pos.y+100; y += catseyedist) {
-        scene.ctx.fillStyle = '#222';
-        scene.drawCircle(new V2d(x-1.5, y), 0, 0.02);
-        scene.drawCircle(new V2d(x+1.5, y), 0, 0.02);
+        scene.ctx.fillStyle = '#444';
+        scene.drawCircle(new V2d(x-0.02, y), 0, 0.01);
+        scene.drawCircle(new V2d(x+0.02, y), 0, 0.01);
     }
 }
 
