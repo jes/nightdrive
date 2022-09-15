@@ -2,8 +2,8 @@ function Scene(ctx) {
     this.ctx = ctx;
     this.viewpoint = new V2d(0,0);
     this.viewz = 1.0;
-    this.viewscale = 200;
-    this.distscale = 1.0;
+    this.viewscale = 500;
+    this.distscale = 0.5;
     this.viewcentre = new V2d(320,240);
 }
 
@@ -23,6 +23,9 @@ Scene.prototype.project = function(pos, z, r) {
     if (posrel.y <= 0) return [null, null, null];
 
     const dist = this.distscale * Math.sqrt(posrel.x*posrel.x + posrel.y*posrel.y + zrel*zrel);
+
+    // things too close are not visible
+    if (dist < 0.5) return [null, null, null];
 
     const screenx = this.viewcentre.x + this.viewscale * (posrel.x / dist);
     const screeny = this.viewcentre.y - this.viewscale * (zrel / dist);
