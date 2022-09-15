@@ -1,19 +1,23 @@
 let laststep = null;
-let observer = new Car();
+let observer;
 let cars = [];
-let lanes = [-3,0,3];
-let oncomingx = 14; // metres
+let lanes = [-10,-7,-4];
+let speed = [40,70,100]; // mph
 let catseyedist = 40; // metres
 
 function init() {
+    observer = new Car();
+    observer.pos.x = lanes[1];
+
     for (let i = 0; i < 200; i++) {
         const car = new Car();
-        car.pos = new V2d(lanes[Math.floor(Math.random()*lanes.length)],i*50);
-        const mph = Math.random()*40 + 50;
+        const lane = Math.floor(Math.random()*lanes.length);
+        car.pos = new V2d(lanes[lane],i*50);
+        const mph = speed[lane];
         car.vel = new V2d(0, mph * 1600 / 3600);
         if (Math.random() < 0.5) {
             car.vel.y = -car.vel.y;
-            car.pos.x += oncomingx;
+            car.pos.x = -car.pos.x;
         }
         cars.push(car);
     }
