@@ -3,7 +3,7 @@ function Scene(ctx) {
     this.viewpoint = new V2d(0,0);
     this.viewz = 1.0;
     this.viewscale = 500;
-    this.distscale = 0.5;
+    this.distscale = 1;
 }
 
 Scene.prototype.drawCircle = function(pos, z, r) {
