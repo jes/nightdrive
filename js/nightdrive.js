@@ -7,13 +7,16 @@ function init() {
     for (let i = 0; i < 20; i++) {
         const car = new Car();
         car.pos = new V2d(lanes[Math.floor(Math.random()*lanes.length)],i*50);
-        car.vel = new V2d(0,0.002+i*0.002);
+        const mph = Math.random()*40 + 50;
+        car.vel = new V2d(0, mph * 1600 / 3600);
         if (Math.random() < 0.5) {
             car.vel.y = -car.vel.y;
             car.pos.x += 12;
         }
         cars.push(car);
     }
+
+    observer.vel.y = 70 * 1600/3600; // 70 mph observer
 
     render();
 }
@@ -22,9 +25,12 @@ function render() {
     step();
 
     const canvas = document.getElementById('canvas');
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
     const ctx = canvas.getContext('2d');
+    console.log(ctx);
     ctx.fillStyle = 'black';
-    ctx.fillRect(0,0,640,480);
+    ctx.fillRect(0,0,canvas.width,canvas.height);
 
     const scene = new Scene(ctx);
     scene.viewpoint = observer.pos;
@@ -44,7 +50,7 @@ function step() {
         return;
     }
 
-    const dt = now - laststep;
+    const dt = (now - laststep) / 1000;
     laststep = now;
 
     observer.step(dt);

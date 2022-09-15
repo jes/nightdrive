@@ -4,7 +4,6 @@ function Scene(ctx) {
     this.viewz = 1.0;
     this.viewscale = 500;
     this.distscale = 0.5;
-    this.viewcentre = new V2d(320,240);
 }
 
 Scene.prototype.drawCircle = function(pos, z, r) {
@@ -27,8 +26,11 @@ Scene.prototype.project = function(pos, z, r) {
     // things too close are not visible
     if (dist < 0.5) return [null, null, null];
 
-    const screenx = this.viewcentre.x + this.viewscale * (posrel.x / dist);
-    const screeny = this.viewcentre.y - this.viewscale * (zrel / dist);
-    const screenr = this.viewscale * (r / dist); // px
+    const scaleratio = this.viewscale * this.ctx.canvas.width / 640;
+
+    const screenx = (this.ctx.canvas.width/2) + scaleratio * (posrel.x / dist);
+    const screeny = (this.ctx.canvas.height/2) - scaleratio *(zrel / dist);
+    const screenr = scaleratio * (r / dist); // px
+
     return [screenx, screeny, screenr];
 };
