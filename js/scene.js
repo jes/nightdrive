@@ -16,7 +16,10 @@ Scene.prototype.drawCircle = function(pos, z, r) {
 
 Scene.prototype.project = function(pos, z, r) {
     const posrel = pos.sub(this.viewpoint);
-    const zrel = z - this.viewz;
+
+    z = z + terrain(pos.y);
+
+    const zrel = z - (this.viewz + terrain(this.viewpoint.y));
 
     // things behind the viewer are not visible
     if (posrel.y <= 0) return [null, null, null];
@@ -34,3 +37,7 @@ Scene.prototype.project = function(pos, z, r) {
 
     return [screenx, screeny, screenr];
 };
+
+function terrain(y) {
+    return 10*Math.sin(y/1000) + 5*Math.cos(y/527) + 2*Math.sin(y/219);
+}
