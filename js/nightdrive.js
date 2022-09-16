@@ -80,3 +80,11 @@ function step() {
 }
 
 init();
+
+let playing = false;
+document.getElementById('canvas').onclick = function() {
+    if (playing) document.getElementById('audio').pause();
+    else document.getElementById('audio').play();
+    playing = !playing;
+    document.getElementById('clickformusic').style='display:none';
+}
