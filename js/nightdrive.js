@@ -92,8 +92,6 @@ function streetlights(scene, x) {
     }
 }
 
-
-
 function step() {
     const now = Date.now();
     if (!laststep) {
