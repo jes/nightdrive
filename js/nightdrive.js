@@ -68,7 +68,7 @@ function render() {
 function catseyes(scene, x) {
     const numlines = Math.floor(observer.pos.y / catseyedist);
     const starty = (numlines-1)*catseyedist;
-    for (let y = starty; y < observer.pos.y+100; y += catseyedist) {
+    for (let y = starty; y < observer.pos.y+50; y += catseyedist) {
         scene.ctx.fillStyle = '#444';
         scene.drawCircle(new V2d(x-0.02, y), 0, 0.01);
         scene.drawCircle(new V2d(x+0.02, y), 0, 0.01);
