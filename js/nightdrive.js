@@ -2,6 +2,9 @@ let laststep = null;
 let observer;
 let cars = [];
 
+let lastwidth;
+let lastheight;
+
 const lanes = [-10,-7,-4];
 const speed = [40,70,100]; // mph
 const catseyedist = 40; // metres
@@ -27,6 +30,9 @@ function init() {
         cars.push(car);
     }
 
+    const canvas = document.getElementById('canvas');
+    resize(canvas);
+
     render();
 }
 
@@ -34,11 +40,14 @@ function render() {
     step();
 
     const canvas = document.getElementById('canvas');
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
+    if (canvas.clientWidth != lastwidth || canvas.clientHeight != lastheight) {
+        resize(canvas);
+    }
     const ctx = canvas.getContext('2d');
-    ctx.fillStyle = 'black';
-    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.beginPath();
+    ctx.rect(0, 0, canvas.width, canvas.height);
+    ctx.fill();
 
     const scene = new Scene(ctx);
     scene.viewpoint = observer.pos;
@@ -107,6 +116,17 @@ function step() {
     for (car of cars) {
         car.step(dt);
     }
+}
+
+function resize(canvas) {
+    lastwidth = canvas.width = canvas.clientWidth;
+    lastheight = canvas.height = canvas.clientHeight;
+
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = 'rgb(0,0,0)';
+    ctx.beginPath();
+    ctx.rect(0, 0, canvas.width, canvas.height);
+    ctx.fill();
 }
 
 init();
