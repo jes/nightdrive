@@ -4,14 +4,35 @@ function Scene(ctx) {
     this.viewz = 1.0;
     this.viewscale = 500;
     this.distscale = 1;
+    this.circles = [];
 }
 
-Scene.prototype.drawCircle = function(pos, z, r) {
-    [screenx, screeny, screenr] = this.project(pos, z, r);
+Scene.prototype.drawCircle = function(pos, z, r, col) {
+    let circle = this.project(pos, z, r);
+    circle.col = col;
+    circle.roady = pos.y;
 
-    this.ctx.beginPath();
-    this.ctx.arc(screenx, screeny, screenr, 0, 180*Math.PI);
-    this.ctx.fill();
+    let ground = this.project(pos, 0, 0);
+    circle.yground = ground.y;
+
+    this.circles.push(circle);
+};
+
+Scene.prototype.render = function() {
+    this.circles.sort((a,b) => {
+        return b.roady - a.roady;
+    });
+
+    for (circle of this.circles) {
+        this.ctx.fillStyle = circle.col;
+        this.ctx.beginPath();
+        this.ctx.arc(circle.x, circle.y, circle.r, 0, 180*Math.PI);
+        this.ctx.fill();
+
+        // occlude everything that is the other side of the ground
+        this.ctx.fillStyle = '#000';
+        this.ctx.fillRect(0, circle.yground, this.ctx.canvas.width, this.ctx.canvas.height);
+    }
 };
 
 Scene.prototype.project = function(pos, z, r) {
@@ -35,7 +56,11 @@ Scene.prototype.project = function(pos, z, r) {
     const screeny = (this.ctx.canvas.height/2) - scaleratio *(zrel / dist);
     const screenr = scaleratio * (r / dist); // px
 
-    return [screenx, screeny, screenr];
+    return {
+        x: screenx,
+        y: screeny,
+        r: screenr,
+    };
 };
 
 function terrain(y) {

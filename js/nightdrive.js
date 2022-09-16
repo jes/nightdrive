@@ -4,6 +4,7 @@ let cars = [];
 let lanes = [-10,-7,-4];
 let speed = [40,70,100]; // mph
 let catseyedist = 40; // metres
+let streetlightdist = 107; // metres
 let started = Date.now();
 
 function init() {
@@ -11,7 +12,7 @@ function init() {
     observer.pos.x = lanes[1];
     observer.vel.y = speed[1] * 1600/3600;
 
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 400; i++) {
         const car = new Car();
         const lane = Math.floor(Math.random()*lanes.length);
         car.pos = new V2d(lanes[lane],i*25);
@@ -45,6 +46,10 @@ function render() {
     for (lanex of lanes) {
         catseyes(scene, lanex+1.5);
     }
+    streetlights(scene, lanes[0]-3.5);
+    streetlights(scene, -0.5);
+    streetlights(scene, -(lanes[0]-3.5));
+    streetlights(scene, 0.5);
 
     for (car of cars) {
         car.render(scene);
@@ -62,6 +67,8 @@ function render() {
         label.style.display = 'none';
     }
 
+    scene.render();
+
     window.requestAnimationFrame(render);
 }
 
@@ -69,11 +76,21 @@ function catseyes(scene, x) {
     const numlines = Math.floor(observer.pos.y / catseyedist);
     const starty = (numlines-1)*catseyedist;
     for (let y = starty; y < observer.pos.y+50; y += catseyedist) {
-        scene.ctx.fillStyle = '#444';
-        scene.drawCircle(new V2d(x-0.02, y), 0, 0.01);
-        scene.drawCircle(new V2d(x+0.02, y), 0, 0.01);
+        scene.drawCircle(new V2d(x-0.02, y), 0.01, 0.01, '#444');
+        scene.drawCircle(new V2d(x+0.02, y), 0.01, 0.01, '#444');
     }
 }
+
+function streetlights(scene, x) {
+    const numlines = Math.floor(observer.pos.y / streetlightdist);
+    const starty = (numlines-1)*streetlightdist;
+    for (let y = starty; y < observer.pos.y+5000; y += streetlightdist) {
+        const col = `rgb(255,255,${150+(x+y)%100})`;
+        scene.drawCircle(new V2d(x, y), 5, 0.2, col);
+    }
+}
+
+
 
 function step() {
     const now = Date.now();

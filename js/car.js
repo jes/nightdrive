@@ -32,14 +32,12 @@ Car.prototype.render = function(scene) {
     if (this.vel.y > 0) {
         // moving in same direction as viewer: draw rearlights
         for (l of this.rearlights) {
-            scene.ctx.fillStyle = l.col;
-            scene.drawCircle(this.pos.sub(l.xy), l.z, l.r);
+            scene.drawCircle(this.pos.sub(l.xy), l.z, l.r, l.col);
         }
     } else {
         // moving in opposite direction to viewer: draw headlights
         for (l of this.headlights) {
-            scene.ctx.fillStyle = l.col;
-            scene.drawCircle(this.pos.sub(l.xy), l.z, l.r);
+            scene.drawCircle(this.pos.sub(l.xy), l.z, l.r, l.col);
         }
     }
 };
@@ -51,7 +49,7 @@ Car.prototype.step = function(dt) {
     while (this.indication > this.indicatorperiod)
         this.indication -= this.indicatorperiod;
 
-    const wrapy = 1000;
+    const wrapy = 10000;
     while (this.pos.y > observer.pos.y+wrapy && this.vel.y > observer.vel.y)
         this.pos.y -= wrapy;
     while (this.pos.y < observer.pos.y && this.vel.y < observer.vel.y)
