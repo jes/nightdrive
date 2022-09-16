@@ -1,19 +1,23 @@
+const fullcircle = 180*Math.PI;
+
 function Scene(ctx) {
     this.ctx = ctx;
     this.viewpoint = new V2d(0,0);
     this.viewz = 1.0;
-    this.viewscale = 500;
-    this.distscale = 1;
+    this.viewscale = 1200;
+    this.distscale = 2;
     this.circles = [];
 }
 
-Scene.prototype.drawCircle = function(pos, z, r, col) {
+Scene.prototype.drawCircle = function(pos, z, r, col, opts) {
     let circle = this.project(pos, z, r);
     circle.col = col;
     circle.roady = pos.y;
 
     let ground = this.project(pos, 0, 0);
     circle.yground = ground.y;
+
+    if (opts && opts.no_occlude) circle.no_occlude = true;
 
     this.circles.push(circle);
 };
@@ -35,11 +39,11 @@ Scene.prototype.render = function() {
     this.circles.reverse();
 
     for (circle of this.circles) {
-        if (circle.occluded) continue;
+        if (circle.occluded && !circle.no_occlude) continue;
 
         this.ctx.fillStyle = circle.col;
         this.ctx.beginPath();
-        this.ctx.arc(circle.x, circle.y, circle.r, 0, 180*Math.PI);
+        this.ctx.arc(circle.x, circle.y, circle.r, 0, fullcircle);
         this.ctx.fill();
     }
 };

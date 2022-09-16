@@ -1,11 +1,13 @@
 let laststep = null;
 let observer;
 let cars = [];
-let lanes = [-10,-7,-4];
-let speed = [40,70,100]; // mph
-let catseyedist = 40; // metres
-let streetlightdist = 107; // metres
-let started = Date.now();
+
+const lanes = [-10,-7,-4];
+const speed = [40,70,100]; // mph
+const catseyedist = 40; // metres
+const streetlightdist = 107; // metres
+const started = Date.now();
+const musiclabeltime = 5000; // ms
 
 function init() {
     observer = new Car();
@@ -60,8 +62,8 @@ function render() {
     label.style.left = `${canvas.width/2 - label.clientWidth/2}px`;
 
     const time = Date.now() - started;
-    if (time < 3000) {
-        const col = (3000-time) * (200/3000);
+    if (time < musiclabeltime) {
+        const col = (musiclabeltime-time) * (200/musiclabeltime);
         label.style.color = `rgb(${col}, ${col}, ${col})`;
     } else {
         label.style.display = 'none';
@@ -75,9 +77,9 @@ function render() {
 function catseyes(scene, x) {
     const numlines = Math.floor(observer.pos.y / catseyedist);
     const starty = (numlines-1)*catseyedist;
-    for (let y = starty; y < observer.pos.y+50; y += catseyedist) {
-        scene.drawCircle(new V2d(x-0.02, y), 0.01, 0.01, '#444');
-        scene.drawCircle(new V2d(x+0.02, y), 0.01, 0.01, '#444');
+    for (let y = starty; y < observer.pos.y+100; y += catseyedist) {
+        scene.drawCircle(new V2d(x-0.02, y), 0.01, 0.01, '#444', {no_occlude: true});
+        scene.drawCircle(new V2d(x+0.02, y), 0.01, 0.01, '#444', {no_occlude: true});
     }
 }
 

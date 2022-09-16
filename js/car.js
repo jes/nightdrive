@@ -17,14 +17,14 @@ function Car() {
 
     const rearlightcolour = colour(180,255, 0,50, 0,50);
     this.rearlights = [
-        {xy: new V2d(-0.8, 0.0), z: lightheight, r: lightradius, col: rearlightcolour},
-        {xy: new V2d( 0.8, 0.0), z: lightheight, r: lightradius, col: rearlightcolour},
+        {xy: new V2d(-0.7, 0.0), z: lightheight, r: lightradius, col: rearlightcolour},
+        {xy: new V2d( 0.7, 0.0), z: lightheight, r: lightradius, col: rearlightcolour},
     ];
 
     const headlightcolour = colour(180,255, 180,255, 180,255);
     this.headlights = [
-        {xy: new V2d(-0.8, 0.0), z: lightheight, r: lightradius, col: headlightcolour},
-        {xy: new V2d( 0.8, 0.0), z: lightheight, r: lightradius, col: headlightcolour},
+        {xy: new V2d(-0.7, 0.0), z: lightheight, r: lightradius, col: headlightcolour},
+        {xy: new V2d( 0.7, 0.0), z: lightheight, r: lightradius, col: headlightcolour},
     ];
 };
 
