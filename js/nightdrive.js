@@ -78,8 +78,8 @@ function catseyes(scene, x) {
     const numlines = Math.floor(observer.pos.y / catseyedist);
     const starty = (numlines-1)*catseyedist;
     for (let y = starty; y < observer.pos.y+100; y += catseyedist) {
-        scene.drawCircle(new V2d(x-0.02, y), 0.01, 0.01, '#444', {no_occlude: true});
-        scene.drawCircle(new V2d(x+0.02, y), 0.01, 0.01, '#444', {no_occlude: true});
+        scene.drawCircle(new V2d(x-0.02, y), 0.01, 0.01, '#666');
+        scene.drawCircle(new V2d(x+0.02, y), 0.01, 0.01, '#666');
     }
 }
 

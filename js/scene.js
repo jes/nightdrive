@@ -9,15 +9,13 @@ function Scene(ctx) {
     this.circles = [];
 }
 
-Scene.prototype.drawCircle = function(pos, z, r, col, opts) {
+Scene.prototype.drawCircle = function(pos, z, r, col) {
     let circle = this.project(pos, z, r);
     circle.col = col;
     circle.roady = pos.y;
 
     let ground = this.project(pos, 0, 0);
     circle.yground = ground.y;
-
-    if (opts && opts.no_occlude) circle.no_occlude = true;
 
     this.circles.push(circle);
 };
@@ -39,7 +37,7 @@ Scene.prototype.render = function() {
     this.circles.reverse();
 
     for (circle of this.circles) {
-        if (circle.occluded && !circle.no_occlude) continue;
+        if (circle.occluded) continue;
 
         this.ctx.fillStyle = circle.col;
         this.ctx.beginPath();
@@ -58,7 +56,7 @@ Scene.prototype.project = function(pos, z, r) {
     // things behind the viewer are not visible
     if (posrel.y <= 0) return [null, null, null];
 
-    const dist = this.distscale * Math.sqrt(posrel.x*posrel.x + posrel.y*posrel.y + zrel*zrel);
+    const dist = this.distscale * Math.sqrt(posrel.y*posrel.y + zrel*zrel);
 
     // things too close are not visible
     if (dist < 0.5) return [null, null, null];
@@ -66,7 +64,7 @@ Scene.prototype.project = function(pos, z, r) {
     const scaleratio = this.viewscale * this.ctx.canvas.width / 640;
 
     const screenx = (this.ctx.canvas.width/2) + scaleratio * (posrel.x / dist);
-    const screeny = (this.ctx.canvas.height/2) - scaleratio *(zrel / dist);
+    const screeny = (this.ctx.canvas.height/2) - scaleratio * (zrel / dist);
     const screenr = scaleratio * (r / dist); // px
 
     return {
