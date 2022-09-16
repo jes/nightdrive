@@ -4,6 +4,7 @@ let cars = [];
 let lanes = [-10,-7,-4];
 let speed = [40,70,100]; // mph
 let catseyedist = 40; // metres
+let started = Date.now();
 
 function init() {
     observer = new Car();
@@ -49,6 +50,18 @@ function render() {
         car.render(scene);
     }
 
+    const label = document.getElementById('clickformusic');
+    label.style.top = `${canvas.height/2 - 100}px`;
+    label.style.left = `${canvas.width/2 - label.clientWidth/2}px`;
+
+    const time = Date.now() - started;
+    if (time < 3000) {
+        const col = (3000-time) * (200/3000);
+        label.style.color = `rgb(${col}, ${col}, ${col})`;
+    } else {
+        label.style.display = 'none';
+    }
+
     window.requestAnimationFrame(render);
 }
 
@@ -86,5 +99,4 @@ document.getElementById('canvas').onclick = function() {
     if (playing) document.getElementById('audio').pause();
     else document.getElementById('audio').play();
     playing = !playing;
-    document.getElementById('clickformusic').style='display:none';
 }
