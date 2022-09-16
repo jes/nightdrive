@@ -11,6 +11,7 @@ function Scene(ctx) {
 
 Scene.prototype.drawCircle = function(pos, z, r, col) {
     let circle = this.project(pos, z, r);
+    if (!circle) return;
     circle.col = col;
     circle.roady = pos.y;
 
@@ -54,12 +55,12 @@ Scene.prototype.project = function(pos, z, r) {
     const zrel = z - (this.viewz + terrain(this.viewpoint.y));
 
     // things behind the viewer are not visible
-    if (posrel.y <= 0) return [null, null, null];
+    if (posrel.y <= 0) return null;
 
     const dist = this.distscale * Math.sqrt(posrel.y*posrel.y + zrel*zrel);
 
     // things too close are not visible
-    if (dist < 0.5) return [null, null, null];
+    if (dist < 0.5) return null;
 
     const scaleratio = this.viewscale * this.ctx.canvas.width / 640;
 
