@@ -19,19 +19,28 @@ Scene.prototype.drawCircle = function(pos, z, r, col) {
 };
 
 Scene.prototype.render = function() {
+    // get the nearest circles first
     this.circles.sort((a,b) => {
-        return b.roady - a.roady;
+        return a.roady - b.roady;
     });
 
+    // work out which circles are occluded by the road
+    let highestroad = this.ctx.canvas.height;
     for (circle of this.circles) {
+        if (circle.yground < highestroad) highestroad = circle.yground;
+        if (circle.y > highestroad) circle.occluded = true;
+    }
+
+    // draw the furthest circles first
+    this.circles.reverse();
+
+    for (circle of this.circles) {
+        if (circle.occluded) continue;
+
         this.ctx.fillStyle = circle.col;
         this.ctx.beginPath();
         this.ctx.arc(circle.x, circle.y, circle.r, 0, 180*Math.PI);
         this.ctx.fill();
-
-        // occlude everything that is the other side of the ground
-        this.ctx.fillStyle = '#000';
-        this.ctx.fillRect(0, circle.yground, this.ctx.canvas.width, this.ctx.canvas.height);
     }
 };
 
