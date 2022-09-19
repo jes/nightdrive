@@ -106,7 +106,7 @@ function catseyes(scene, x, col) {
 function streetlights(scene, x) {
     const numlines = Math.floor(observer.pos.y / streetlightdist);
     const starty = (numlines-1)*streetlightdist;
-    for (let y = starty; y < observer.pos.y+5000; y += streetlightdist) {
+    for (let y = starty; y < observer.pos.y+3000; y += streetlightdist) {
         const col = `rgb(255,255,${150+((99*x)+(31*y))%101})`;
         scene.drawCircle(new V2d(x, y), 5, 0.2, col);
     }

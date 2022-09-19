@@ -88,7 +88,7 @@ Car.prototype.step = function(dt) {
 
         if (this.lane == this.targetlane) {
             // decelerate in x
-            this.vel = new V2d(this.vel.x-k*m*0.7*dt, this.vel.y);
+            this.vel = new V2d(this.vel.x-k*m*0.79*dt, this.vel.y);
         } else {
             // accelerate in x
             this.vel = new V2d(this.vel.x+k*m*0.8*dt, this.vel.y);

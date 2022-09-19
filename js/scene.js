@@ -58,7 +58,7 @@ Scene.prototype.project = function(pos, z, r) {
     const dx = bend(this.viewpoint.y+dy) - bend(this.viewpoint.y);
     const theta = Math.atan2(dx,dy);
     const posrel1 = pos.add(new V2d(bend(pos.y),0)).sub(this.viewpoint.add(new V2d(bend(this.viewpoint.y),0)));
-    const posrel = new V2d(Math.cos(theta)*posrel1.x - Math.sin(theta)*posrel1.y, Math.sin(theta)*posrel1.x + Math.cos(theta)*posrel1.y);
+    const posrel = posrel1.rotate(theta);
 
     z = z + terrain(pos.y);
 
