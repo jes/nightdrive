@@ -45,7 +45,7 @@ Scene.prototype.render = function() {
 
         for (let k = 1.0; k > 0; k -= 0.15) {
             this.ctx.beginPath();
-            this.ctx.arc(circle.x, circle.y, circle.r*k*k, 0, fullcircle);
+            this.ctx.arc(circle.x, circle.y, circle.r*1.5*k*k, 0, fullcircle);
             this.ctx.fill();
         }
     }
