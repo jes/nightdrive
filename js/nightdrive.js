@@ -54,9 +54,7 @@ function render() {
     }
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = 'rgba(0,0,0,0.3)';
-    ctx.beginPath();
-    ctx.rect(0, 0, canvas.width, canvas.height);
-    ctx.fill();
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const scene = new Scene(ctx);
     scene.viewpoint = observer.pos;
