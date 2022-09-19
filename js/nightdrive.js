@@ -1,13 +1,14 @@
 let laststep = null;
 let observer;
 let cars = [];
+let planes = [];
 
 let lastwidth;
 let lastheight;
 
 const lanes = [-10,-7,-4];
 const speed = [60,66,80]; // mph
-const catseyedist = 40; // metres
+const catseyedist = 20; // metres
 const streetlightdist = 107; // metres
 const started = Date.now();
 const musiclabeltime = 5000; // ms
@@ -60,10 +61,10 @@ function render() {
     scene.viewpoint = observer.pos;
     scene.viewz = 1.0; // 1 metre off ground
 
-    catseyes(scene, lanes[0]-1.5);
-    for (lanex of lanes) {
-        catseyes(scene, lanex+1.5);
-    }
+    catseyes(scene, lanes[0]-1.5, '#811');
+    catseyes(scene, lanes[0]+1.5, '#666');
+    catseyes(scene, lanes[1]+1.5, '#666');
+    catseyes(scene, lanes[2]+1.5, '#861');
     streetlights(scene, lanes[0]-3.5);
     streetlights(scene, -0.5);
     streetlights(scene, -(lanes[0]-3.5));
@@ -71,6 +72,9 @@ function render() {
 
     for (car of cars) {
         car.render(scene);
+    }
+    for (plane of planes) {
+        plane.render(scene);
     }
 
     const label = document.getElementById('clickformusic');
@@ -90,12 +94,12 @@ function render() {
     window.requestAnimationFrame(render);
 }
 
-function catseyes(scene, x) {
+function catseyes(scene, x, col) {
     const numlines = Math.floor(observer.pos.y / catseyedist);
     const starty = (numlines-1)*catseyedist;
     for (let y = starty; y < observer.pos.y+100; y += catseyedist) {
-        scene.drawCircle(new V2d(x-0.02, y), 0.01, 0.015, '#666', {no_occlude: true});
-        scene.drawCircle(new V2d(x+0.02, y), 0.01, 0.015, '#666', {no_occlude: true});
+        scene.drawCircle(new V2d(x-0.02, y), 0.01, 0.015, col, {no_occlude: true});
+        scene.drawCircle(new V2d(x+0.02, y), 0.01, 0.015, col, {no_occlude: true});
     }
 }
 
@@ -120,6 +124,23 @@ function step() {
 
     for (car of cars) {
         car.step(dt);
+    }
+    for (plane of planes) {
+        plane.step(dt);
+    }
+    // delete planes that are behind the viewer
+    planes = planes.filter((p) => p.pos.y > observer.pos.y);
+    // add new planes occasionally
+    if (Math.random() < 0.00005 && planes.length < 4) {
+        let plane = new Plane();
+        plane.pos = new V2d(observer.pos.x-10000-Math.random()*2000, observer.pos.y+20000+Math.random()*5000);
+        plane.vel = new V2d(20+Math.random()*20, 2+Math.random()*5);
+        if (Math.random() < 0.5) {
+            plane.pos = new V2d(-plane.pos.x, plane.pos.y);
+            plane.vel.x = -plane.vel.x;
+        }
+        plane.z = 3000+Math.random()*2000;
+        planes.push(plane);
     }
 }
 
