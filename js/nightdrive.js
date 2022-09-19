@@ -6,7 +6,7 @@ let lastwidth;
 let lastheight;
 
 const lanes = [-10,-7,-4];
-const speed = [60,70,80]; // mph
+const speed = [60,66,80]; // mph
 const catseyedist = 40; // metres
 const streetlightdist = 107; // metres
 const started = Date.now();
@@ -53,7 +53,7 @@ function render() {
         resize(canvas);
     }
     const ctx = canvas.getContext('2d');
-    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.fillStyle = 'rgba(1,1,1,0.3)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const scene = new Scene(ctx);

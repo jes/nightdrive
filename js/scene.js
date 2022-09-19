@@ -24,6 +24,8 @@ Scene.prototype.drawCircle = function(pos, z, r, col, opts) {
 };
 
 Scene.prototype.render = function() {
+    this.ctx.globalCompositeOperation = 'lighter';
+    this.ctx.globalAlpha = 0.2;
     // get the nearest circles first
     this.circles.sort((a,b) => {
         return a.roady - b.roady;
@@ -36,17 +38,19 @@ Scene.prototype.render = function() {
         if (circle.y > highestroad && !circle.no_occlude) circle.occluded = true;
     }
 
-    // draw the furthest circles first
-    this.circles.reverse();
-
     for (circle of this.circles) {
         if (circle.occluded) continue;
 
         this.ctx.fillStyle = circle.col;
-        this.ctx.beginPath();
-        this.ctx.arc(circle.x, circle.y, circle.r, 0, fullcircle);
-        this.ctx.fill();
+
+        for (let k = 1.0; k > 0; k -= 0.15) {
+            this.ctx.beginPath();
+            this.ctx.arc(circle.x, circle.y, circle.r*k*k, 0, fullcircle);
+            this.ctx.fill();
+        }
     }
+    this.ctx.globalCompositeOperation = 'source-over';
+    this.ctx.globalAlpha = 1.0;
 };
 
 Scene.prototype.project = function(pos, z, r) {
