@@ -6,7 +6,7 @@ let lastwidth;
 let lastheight;
 
 const lanes = [-10,-7,-4];
-const speed = [40,70,100]; // mph
+const speed = [60,70,80]; // mph
 const catseyedist = 40; // metres
 const streetlightdist = 107; // metres
 const started = Date.now();
@@ -16,6 +16,10 @@ function init() {
     observer = new Car();
     observer.pos.x = lanes[1];
     observer.vel.y = speed[1] * 1600/3600;
+    observer.lanes = lanes;
+
+    const ourlanes = lanes;
+    const theirlanes = ourlanes.map((x) => -x);
 
     for (let i = 0; i < 400; i++) {
         const car = new Car();
@@ -23,10 +27,13 @@ function init() {
         car.pos = new V2d(lanes[lane],i*25);
         const mph = speed[lane];
         car.vel = new V2d(0, mph * 1600 / 3600);
+        car.lanes = ourlanes;
         if (Math.random() < 0.5) {
             car.vel.y = -car.vel.y;
             car.pos.x = -car.pos.x;
+            car.lanes = theirlanes;
         }
+        car.vel.y += Math.random() * 20 - 10;
         cars.push(car);
     }
 

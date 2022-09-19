@@ -14,3 +14,7 @@ V2d.prototype.sub = function(v) {
 V2d.prototype.mul = function(k) {
     return new V2d(this.x * k, this.y * k);
 };
+
+V2d.prototype.length = function(k) {
+    return Math.sqrt(this.x*this.x + this.y*this.y);
+};
