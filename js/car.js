@@ -68,7 +68,7 @@ Car.prototype.step = function(dt) {
     while (this.indication > this.indicatorperiod)
         this.indication -= this.indicatorperiod;
 
-    const wrapy = 10000;
+    const wrapy = 2500;
     while (this.pos.y > observer.pos.y+wrapy && this.vel.y > observer.vel.y)
         this.pos.y -= wrapy;
     while (this.pos.y < observer.pos.y && this.vel.y < observer.vel.y)
@@ -105,24 +105,33 @@ Car.prototype.step = function(dt) {
 
     const collision_secs = 7.0;
 
+    const min_clearance = 2.0; // metres
+
     let leftlanesafe = this.lane > 0;
 
-    for (car of cars) {
+    loop:
+    //for (car of cars) {
+    for (let j = 0; j < cars.length; j++) {
+        const car = cars[j];
         if (car == this) continue;
+        if (Math.sign(car.vel.y*this.vel.y) == -1) continue;
 
-        // if we're not in the fast lane, and we're behind this car, and it's in our lane, and we're going faster, and we'll hit it within N seconds, change lanes
-        if (Math.sign(car.vel.y)==k && this.lane < this.lanes.length-1 && this.lane==car.lane && k*this.pos.y < k*car.pos.y && k*this.vel.y > k*car.vel.y && k*(this.pos.y+this.vel.y*collision_secs) > k*(car.pos.y+car.vel.y*collision_secs)) {
-            this.changelane = true;
-            this.sourcelane = this.lane;
-            this.targetlane = this.lane+1;
-            break;
+        for (let i = -1; i <= 1; i++) {
+            const yoff = i*wrapy;
+
+            // if we're not in the fast lane, and we're behind this car, and it's in our lane, and we're going faster, and we'll hit it within N seconds, change lanes
+            if (Math.sign(car.vel.y)==k && this.lane < this.lanes.length-1 && this.lane<=car.lane && k*(this.pos.y+yoff) < k*car.pos.y && k*this.vel.y > k*car.vel.y && k*(this.pos.y+yoff+this.vel.y*collision_secs+min_clearance) > k*(car.pos.y+car.vel.y*collision_secs)) {
+                this.changelane = true;
+                this.sourcelane = this.lane;
+                this.targetlane = this.lane+1;
+                break loop;
+            }
+
+            // the left lane is not safe if there is a car in it that we'd hit within 3N seconds
+            if (Math.sign(car.vel.y)==k && car.lane==this.lane-1 && k*(this.pos.y+yoff) < k*car.pos.y && k*this.vel.y > k*car.vel.y && k*(this.pos.y+yoff+this.vel.y*collision_secs*3) > k*(car.pos.y+car.vel.y*collision_secs*3+min_clearance)) {
+                leftlanesafe = false;
+            }
         }
-
-        // the left lane is not safe if there is a car in it that we'd hit within 3N seconds
-        if (Math.sign(car.vel.y)==k && car.lane==this.lane-1 && k*this.pos.y < k*car.pos.y && k*this.vel.y > k*car.vel.y && k*(this.pos.y+this.vel.y*collision_secs*3) > k*(car.pos.y+car.vel.y*collision_secs*3)) {
-            leftlanesafe = false;
-        }
-
     }
 
     // move left if we're not changing lane and the left lane is safe

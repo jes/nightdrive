@@ -21,7 +21,7 @@ function init() {
     const ourlanes = lanes;
     const theirlanes = ourlanes.map((x) => -x);
 
-    for (let i = 0; i < 400; i++) {
+    for (let i = 0; i < 100; i++) {
         const car = new Car();
         const lane = Math.floor(Math.random()*lanes.length);
         car.pos = new V2d(lanes[lane],i*25);
@@ -36,6 +36,8 @@ function init() {
         car.vel.y += Math.random() * 20 - 10;
         cars.push(car);
     }
+
+    cars.push(observer);
 
     const canvas = document.getElementById('canvas');
     resize(canvas);
@@ -117,8 +119,6 @@ function step() {
 
     const dt = (now - laststep) / 1000;
     laststep = now;
-
-    observer.step(dt);
 
     for (car of cars) {
         car.step(dt);
