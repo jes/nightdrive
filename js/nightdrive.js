@@ -134,7 +134,7 @@ function step() {
     if (Math.random() < 0.00005 && planes.length < 4) {
         let plane = new Plane();
         plane.pos = new V2d(observer.pos.x-10000-Math.random()*2000, observer.pos.y+20000+Math.random()*5000);
-        plane.vel = new V2d(20+Math.random()*20, 2+Math.random()*5);
+        plane.vel = new V2d(30+Math.random()*20, Math.random()*10-5);
         if (Math.random() < 0.5) {
             plane.pos = new V2d(-plane.pos.x, plane.pos.y);
             plane.vel.x = -plane.vel.x;
