@@ -9,7 +9,7 @@ function Scene(ctx) {
     this.circles = [];
 }
 
-Scene.prototype.drawCircle = function(pos, z, r, col) {
+Scene.prototype.drawCircle = function(pos, z, r, col, opts) {
     let circle = this.project(pos, z, r);
     if (!circle) return;
     circle.col = col;
@@ -17,6 +17,8 @@ Scene.prototype.drawCircle = function(pos, z, r, col) {
 
     let ground = this.project(pos, 0, 0);
     circle.yground = ground.y;
+
+    if (opts && opts.no_occlude) circle.no_occlude = true;
 
     this.circles.push(circle);
 };
@@ -31,7 +33,7 @@ Scene.prototype.render = function() {
     let highestroad = this.ctx.canvas.height;
     for (circle of this.circles) {
         if (circle.yground < highestroad) highestroad = circle.yground;
-        if (circle.y > highestroad) circle.occluded = true;
+        if (circle.y > highestroad && !circle.no_occlude) circle.occluded = true;
     }
 
     // draw the furthest circles first
@@ -48,7 +50,11 @@ Scene.prototype.render = function() {
 };
 
 Scene.prototype.project = function(pos, z, r) {
-    const posrel = pos.sub(this.viewpoint);
+    const dy = 0.1;
+    const dx = bend(this.viewpoint.y+dy) - bend(this.viewpoint.y);
+    const theta = Math.atan2(dx,dy);
+    const posrel1 = pos.add(new V2d(bend(pos.y),0)).sub(this.viewpoint.add(new V2d(bend(this.viewpoint.y),0)));
+    const posrel = new V2d(Math.cos(theta)*posrel1.x - Math.sin(theta)*posrel1.y, Math.sin(theta)*posrel1.x + Math.cos(theta)*posrel1.y);
 
     z = z + terrain(pos.y);
 
@@ -77,4 +83,8 @@ Scene.prototype.project = function(pos, z, r) {
 
 function terrain(y) {
     return 10*Math.sin(y/1000) + 5*Math.cos(y/527) + 2*Math.sin(y/219);
+}
+
+function bend(y) {
+    return 200*Math.sin(y/909) + 51*Math.cos(y/517) + 23*Math.sin(y/201);
 }
